@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fad's Payment | Klaim Pembayaran</title>
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5A52D5;
+            --secondary: #00D4AA;
+            --accent: #FF6B00;
+            --warning: #FFC107;
+            --payment: #9C27B0;
+            --dark: #0F0F1B;
+            --darker: #070711;
+            --light: #F5F5F7;
+            --gray: #8E8EA0;
+            --success: #28A745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(7, 7, 17, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background-color 0.3s;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* Language Switcher */
+        .language-switcher {
+            position: relative;
+        }
+        
+        .language-button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .language-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 5px;
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px;
+            min-width: 140px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1001;
+        }
+        
+        .language-dropdown.active {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 10px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .language-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .language-option.active {
+            background: rgba(108, 99, 255, 0.2);
+            color: var(--primary);
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 80px;
+            text-align: center;
+            background: radial-gradient(circle at top right, rgba(108, 99, 255, 0.1), transparent 50%);
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Shortcut Section - Diperbarui */
+        .shortcut-section {
+            padding: 30px 0;
+            background: linear-gradient(135deg, rgba(76, 0, 130, 0.3), rgba(0, 100, 0, 0.3));
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .shortcut-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .shortcut-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--light);
+            font-weight: 600;
+        }
+        
+        .shortcut-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .shortcut-button {
+            background: linear-gradient(135deg, #4B0082, #6A0DAD);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+            min-width: 160px;
+            box-shadow: 0 4px 12px rgba(75, 0, 130, 0.3);
+        }
+        
+        .shortcut-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(75, 0, 130, 0.4);
+        }
+        
+        .shortcut-button.secondary {
+            background: linear-gradient(135deg, #006400, #008000);
+            box-shadow: 0 4px 12px rgba(0, 100, 0, 0.3);
+        }
+        
+        .shortcut-button.secondary:hover {
+            box-shadow: 0 8px 20px rgba(0, 100, 0, 0.4);
+        }
+        
+        /* Warning Section */
+        .warning-section {
+            padding: 80px 0;
+            background: var(--dark);
+        }
+        
+        .warning-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .warning-box {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .warning-box h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--warning);
+        }
+        
+        .warning-box p {
+            font-size: 1rem;
+            color: var(--light);
+            margin-bottom: 15px;
+        }
+        
+        .warning-box a {
+            color: var(--warning);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .warning-box a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Form Section */
+        .form-section {
+            padding: 80px 0;
+            position: relative;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .payment-form {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+        }
+        
+        /* Invited Emails Section */
+        .invited-emails {
+            margin-bottom: 25px;
+        }
+        
+        .email-input-group {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .email-input-group input {
+            flex: 1;
+            margin-right: 10px;
+        }
+        
+        .remove-email {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 6px;
+            padding: 0 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .remove-email:hover {
+            background: rgba(255, 0, 0, 0.3);
+        }
+        
+        .add-email {
+            background: rgba(0, 212, 170, 0.2);
+            color: var(--secondary);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 6px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .add-email:hover {
+            background: rgba(0, 212, 170, 0.3);
+        }
+        
+        /* Process Section */
+        .process-section {
+            padding: 80px 0;
+            background: var(--dark);
+        }
+        
+        .process-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .process-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .step-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+        
+        .step-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Payment Methods */
+        .payment-methods {
+            padding: 80px 0;
+        }
+        
+        .methods-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .method-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .method-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(108, 99, 255, 0.2);
+        }
+        
+        .method-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .method-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 50px 0 20px;
+            background: var(--darker);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .footer-logo span {
+            color: var(--primary);
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .payment-form {
+                padding: 30px 20px;
+            }
+            
+            .methods-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .header-actions {
+                gap: 10px;
+            }
+            
+            .language-button {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+            
+            .shortcut-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .shortcut-button {
+                width: 100%;
+                max-width: 250px;
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+            
+            .shortcut-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">Fad's <span>Payment</span></a>
+                <ul class="nav-links">
+                    <li><a href="#warning" data-i18n="nav.warning">Perhatian</a></li>
+                    <li><a href="#shortcut" data-i18n="nav.shortcut">Shortcut</a></li>
+                    <li><a href="#form" data-i18n="nav.claim">Klaim Payment</a></li>
+                    <li><a href="#process" data-i18n="nav.process">Proses</a></li>
+                    <li><a href="#methods" data-i18n="nav.methods">Metode Bayar</a></li>
+                </ul>
+                <div class="header-actions">
+                    <!-- Language Switcher -->
+                    <div class="language-switcher">
+                        <button class="language-button" id="languageButton">
+                            <span>🇮🇩 ID</span>
+                            <span>▼</span>
+                        </button>
+                        <div class="language-dropdown" id="languageDropdown">
+                            <div class="language-option active" data-lang="id">
+                                <span>🇮🇩</span>
+                                <span data-i18n="language.id">Indonesia</span>
+                            </div>
+                            <div class="language-option" data-lang="en">
+                                <span>🇺🇸</span>
+                                <span data-i18n="language.en">English</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#shortcut" class="cta-button" data-i18n="nav.claimNow">Klaim Sekarang</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 data-i18n="hero.title">Klaim <span>Pembayaran</span> Fad's 7777</h1>
+            <p data-i18n="hero.subtitle">Isi form dengan data yang benar untuk proses pembayaran yang lancar dan tepat waktu.</p>
+            
+            <div class="hero-badges">
+                <div class="badge" data-i18n="hero.badge1">Proses 1:1</div>
+                <div class="badge" data-i18n="hero.badge2">Tidak Perlu Chat Admin</div>
+                <div class="badge" data-i18n="hero.badge3">Cek Data di datafads.vercel.app</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shortcut Section - Diperbarui -->
+    <section class="shortcut-section" id="shortcut">
+        <div class="container">
+            <div class="shortcut-container">
+                <h2 class="shortcut-title" data-i18n="shortcut.title">Shortcut Alternatif</h2>
+                <div class="shortcut-buttons">
+                    <a href="#member-form" class="shortcut-button" data-i18n="shortcut.member">Khusus Member</a>
+                    <a href="#refferer-form" class="shortcut-button secondary" data-i18n="shortcut.refferer">Khusus Refferer</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Warning Section -->
+    <section class="warning-section" id="warning">
+        <div class="container">
+            <div class="warning-container">
+                <div class="warning-box">
+                    <h2 data-i18n="warning.title">⚠️ PERHATIAN PENTING!</h2>
+                    <p data-i18n="warning.message1"><strong>Perhatikan isi data Payment kalian dengan benar, admin tidak bertanggung jawab jika ada kesalahan penulisan dari User itu sendiri!</strong></p>
+                    <p data-i18n="warning.message2">Pastikan data yang Anda masukkan sesuai dengan data di grup. Anda bisa cek data Anda di <a href="https://datafads.vercel.app" target="_blank">datafads.vercel.app</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="form-section" id="form">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="form.title">Form Klaim Pembayaran</h2>
+                <p data-i18n="form.subtitle">Isi form berikut dengan data yang benar dan sesuai</p>
+            </div>
+            
+            <!-- Member Form -->
+            <div class="payment-form" id="member-form">
+                <!-- Form yang sebenarnya untuk Member -->
+                <form id="member-payment-claim-form">
+                    <h3 style="margin-bottom: 20px; color: var(--primary); text-align: center;" data-i18n="form.memberTitle">Form Klaim Pembayaran - Member</h3>
+                    
+                    <div class="form-group">
+                        <label for="email" data-i18n="form.email">Email LinkedIn</label>
+                        <input type="email" id="email" class="form-control" placeholder="nama@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="account-status" data-i18n="form.status">Status Account</label>
+                        <select id="account-status" class="form-control" required>
+                            <option value="" data-i18n="form.selectStatus">Pilih Status Account</option>
+                            <option value="Running">Running</option>
+                            <option value="Old Running">Old Running</option>
+                            <option value="Unrestrict">Unrestrict</option>
+                            <option value="Restrict">Restrict</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="payment-method" data-i18n="form.paymentMethod">Payment Method</label>
+                        <select id="payment-method" class="form-control" required>
+                            <option value="" data-i18n="form.selectPayment">Pilih Metode Pembayaran</option>
+                            <option value="Seabank">Seabank</option>
+                            <option value="Dana">Dana</option>
+                            <option value="Gopay">Gopay</option>
+                            <option value="OVO">OVO</option>
+                            <option value="BRI">BRI</option>
+                            <option value="Mandiri">Mandiri</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BNI">BNI</option>
+                            <option value="LinkAja">LinkAja</option>
+                            <option value="ShopeePay">ShopeePay</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="account-name" data-i18n="form.accountName">Atas Nama</label>
+                        <input type="text" id="account-name" class="form-control" placeholder="Nama pemilik rekening/akun" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="account-number" data-i18n="form.accountNumber">Nomor Rekening/Akun</label>
+                        <input type="text" id="account-number" class="form-control" placeholder="Nomor rekening/akun pembayaran" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-button" data-i18n="form.submit">Klaim Pembayaran</button>
+                </form>
+            </div>
+            
+            <!-- Refferer Form -->
+            <div class="payment-form" id="refferer-form" style="margin-top: 60px;">
+                <!-- Form yang sebenarnya untuk Refferer -->
+                <form id="refferer-payment-claim-form">
+                    <h3 style="margin-bottom: 20px; color: var(--secondary); text-align: center;" data-i18n="form.reffererTitle">Form Klaim Pembayaran - Refferer</h3>
+                    
+                    <div class="form-group">
+                        <label for="refferer-email" data-i18n="form.reffererEmail">Email Refferer</label>
+                        <input type="email" id="refferer-email" class="form-control" placeholder="nama@email.com" required>
+                    </div>
+                    
+                    <!-- Tambahan: Field Code Referral di bawah Email Refferer -->
+                    <div class="form-group">
+                        <label for="referral-code" data-i18n="form.referralCode">Code Referral</label>
+                        <input type="text" id="referral-code" class="form-control" placeholder="Masukkan code referral Anda" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label data-i18n="form.invitedEmails">Email yang di undang</label>
+                        <div class="invited-emails" id="invited-emails-container">
+                            <div class="email-input-group">
+                                <input type="email" class="form-control invited-email" placeholder="email1@domain.com" required>
+                                <button type="button" class="remove-email" style="display: none;">×</button>
+                            </div>
+                            <div class="email-input-group">
+                                <input type="email" class="form-control invited-email" placeholder="email2@domain.com" required>
+                                <button type="button" class="remove-email" style="display: none;">×</button>
+                            </div>
+                            <div class="email-input-group">
+                                <input type="email" class="form-control invited-email" placeholder="email3@domain.com" required>
+                                <button type="button" class="remove-email" style="display: none;">×</button>
+                            </div>
+                        </div>
+                        <button type="button" class="add-email" id="add-email-btn" data-i18n="form.addMore">+ Add More</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="refferer-payment-method" data-i18n="form.paymentMethod">Payment Method</label>
+                        <select id="refferer-payment-method" class="form-control" required>
+                            <option value="" data-i18n="form.selectPayment">Pilih Metode Pembayaran</option>
+                            <option value="Seabank">Seabank</option>
+                            <option value="Dana">Dana</option>
+                            <option value="Gopay">Gopay</option>
+                            <option value="OVO">OVO</option>
+                            <option value="BRI">BRI</option>
+                            <option value="Mandiri">Mandiri</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BNI">BNI</option>
+                            <option value="LinkAja">LinkAja</option>
+                            <option value="ShopeePay">ShopeePay</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="refferer-account-name" data-i18n="form.accountName">Atas Nama</label>
+                        <input type="text" id="refferer-account-name" class="form-control" placeholder="Nama pemilik rekening/akun" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="refferer-account-number" data-i18n="form.accountNumber">Nomor Rekening/Akun</label>
+                        <input type="text" id="refferer-account-number" class="form-control" placeholder="Nomor rekening/akun pembayaran" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-button" data-i18n="form.submit">Klaim Pembayaran</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process-section" id="process">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="process.title">Proses Pembayaran</h2>
+                <p data-i18n="process.subtitle">Berikut adalah proses yang akan dilakukan setelah Anda mengisi form</p>
+            </div>
+            
+            <div class="process-container">
+                <div class="process-steps">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 data-i18n="process.step1.title">Isi Form dengan Benar</h3>
+                            <p data-i18n="process.step1.description">Pastikan semua data yang Anda masukkan sudah benar dan sesuai dengan data di grup. Cek kembali sebelum submit.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 data-i18n="process.step2.title">Kirim Form Sekali Saja</h3>
+                            <p data-i18n="process.step2.description">Cukup kirim form 1x saja. Tidak boleh spam form, tidak boleh chat ke admin, tidak boleh telepon selama proses payment berlangsung.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 data-i18n="process.step3.title">Proses Payment 1:1</h3>
+                            <p data-i18n="process.step3.description">Semua akan diproses 1:1 mulai dari pertama chat masuk. Admin akan memproses sesuai urutan pengisian form.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3 data-i18n="process.step4.title">Tunggu Konfirmasi</h3>
+                            <p data-i18n="process.step4.description">Tunggu konfirmasi pembayaran. Proses mungkin memakan waktu tergantung jumlah klaim yang masuk.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Methods -->
+    <section class="payment-methods" id="methods">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="methods.title">Metode Pembayaran yang Tersedia</h2>
+                <p data-i18n="methods.subtitle">Pilih metode pembayaran yang paling nyaman untuk Anda</p>
+            </div>
+            
+            <div class="methods-container">
+                <div class="methods-grid">
+                    <div class="method-item">
+                        <div class="method-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#FF6B00"/>
+                                <text x="20" y="24" text-anchor="middle" fill="white" font-weight="bold" font-size="14">SB</text>
+                            </svg>
+                        </div>
+                        <div class="method-name">Seabank</div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#0081AF"/>
+                                <text x="20" y="24" text-anchor="middle" fill="white" font-weight="bold" font-size="14">D</text>
+                            </svg>
+                        </div>
+                        <div class="method-name">Dana</div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#00AA13"/>
+                                <text x="20" y="24" text-anchor="middle" fill="white" font-weight="bold" font-size="14">G</text>
+                            </svg>
+                        </div>
+                        <div class="method-name">Gopay</div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#4C2B87"/>
+                                <text x="20" y="24" text-anchor="middle" fill="white" font-weight="bold" font-size="14">O</text>
+                            </svg>
+                        </div>
+                        <div class="method-name">OVO</div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#0033A0"/>
+                                <text x="20" y="24" text-anchor="middle" fill="white" font-weight="bold" font-size="14">BRI</text>
+                            </svg>
+                        </div>
+                        <div class="method-name">BRI</div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <defs>
+                                    <linearGradient id="mandiriGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#FF6B00" />
+                                        <stop offset="100%" stop-color="#FF8C00" />
+                                    </linearGradient>
+                                </defs>
+                                <rect width="40" height="40" rx="8" fill="url(#mandiriGradient)"/>
+                                <text x="20" y="24" text-anchor="middle" fill="white" font-weight="bold" font-size="12">MDR</text>
+                            </svg>
+                        </div>
+                        <div class="method-name">Mandiri</div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#0066B3"/>
+                                <text x="20" y="24" text-anchor="middle" fill="white" font-weight="bold" font-size="14">BCA</text>
+                            </svg>
+                        </div>
+                        <div class="method-name">BCA</div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#0066B3"/>
+                                <text x="20" y="24" text-anchor="middle" fill="white" font-weight="bold" font-size="14">BNI</text>
+                            </svg>
+                        </div>
+                        <div class="method-name">BNI</div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#E30613"/>
+                                <text x="20" y="24" text-anchor="middle" fill="white" font-weight="bold" font-size="10">LA</text>
+                            </svg>
+                        </div>
+                        <div class="method-name">LinkAja</div>
+                    </div>
+                    <div class="method-item">
+                        <div class="method-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="8" fill="#FF6600"/>
+                                <text x="20" y="24" text-anchor="middle" fill="white" font-weight="bold" font-size="10">SP</text>
+                            </svg>
+                        </div>
+                        <div class="method-name">ShopeePay</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">Fad's <span>Payment</span></div>
+                <div class="footer-links">
+                    <a href="https://datafads.vercel.app" target="_blank" data-i18n="footer.checkData">Cek Data</a>
+                    <a href="https://chat.whatsapp.com/JRJt2Ngw7G9Fx9yNoMCUfB?mode=ac_t" target="_blank" data-i18n="footer.contact">Grup WhatsApp</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-i18n="footer.copyright">&copy; 2023 Fad's 7777. Sistem Klaim Pembayaran.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Language translations
+        const translations = {
+            id: {
+                // Navigation
+                "nav.warning": "Perhatian",
+                "nav.shortcut": "Shortcut",
+                "nav.claim": "Klaim Payment",
+                "nav.process": "Proses",
+                "nav.methods": "Metode Bayar",
+                "nav.claimNow": "Klaim Sekarang",
+                
+                // Language
+                "language.id": "Indonesia",
+                "language.en": "English",
+                
+                // Hero Section
+                "hero.title": "Klaim <span>Pembayaran</span> Fad's 7777",
+                "hero.subtitle": "Isi form dengan data yang benar untuk proses pembayaran yang lancar dan tepat waktu.",
+                "hero.badge1": "Proses 1:1",
+                "hero.badge2": "Tidak Perlu Chat Admin",
+                "hero.badge3": "Cek Data di datafads.vercel.app",
+                
+                // Shortcut Section
+                "shortcut.title": "Shortcut Alternatif",
+                "shortcut.member": "Khusus Member",
+                "shortcut.refferer": "Khusus Refferer",
+                
+                // Warning Section
+                "warning.title": "⚠️ PERHATIAN PENTING!",
+                "warning.message1": "<strong>Perhatikan isi data Payment kalian dengan benar, admin tidak bertanggung jawab jika ada kesalahan penulisan dari User itu sendiri!</strong>",
+                "warning.message2": "Pastikan data yang Anda masukkan sesuai dengan data di grup. Anda bisa cek data Anda di",
+                
+                // Form Section
+                "form.title": "Form Klaim Pembayaran",
+                "form.subtitle": "Isi form berikut dengan data yang benar dan sesuai",
+                "form.memberTitle": "Form Klaim Pembayaran - Member",
+                "form.reffererTitle": "Form Klaim Pembayaran - Refferer",
+                "form.email": "Email LinkedIn",
+                "form.reffererEmail": "Email Refferer",
+                "form.invitedEmails": "Email yang di undang",
+                "form.referralCode": "Code Referral",
+                "form.status": "Status Account",
+                "form.selectStatus": "Pilih Status Account",
+                "form.paymentMethod": "Payment Method",
+                "form.selectPayment": "Pilih Metode Pembayaran",
+                "form.accountName": "Atas Nama",
+                "form.accountNumber": "Nomor Rekening/Akun",
+                "form.submit": "Klaim Pembayaran",
+                "form.addMore": "+ Add More",
+                
+                // Process Section
+                "process.title": "Proses Pembayaran",
+                "process.subtitle": "Berikut adalah proses yang akan dilakukan setelah Anda mengisi form",
+                "process.step1.title": "Isi Form dengan Benar",
+                "process.step1.description": "Pastikan semua data yang Anda masukkan sudah benar dan sesuai dengan data di grup. Cek kembali sebelum submit.",
+                "process.step2.title": "Kirim Form Sekali Saja",
+                "process.step2.description": "Cukup kirim form 1x saja. Tidak boleh spam form, tidak boleh chat ke admin, tidak boleh telepon selama proses payment berlangsung.",
+                "process.step3.title": "Proses Payment 1:1",
+                "process.step3.description": "Semua akan diproses 1:1 mulai dari pertama chat masuk. Admin akan memproses sesuai urutan pengisian form.",
+                "process.step4.title": "Tunggu Konfirmasi",
+                "process.step4.description": "Tunggu konfirmasi pembayaran. Proses mungkin memakan waktu tergantung jumlah klaim yang masuk.",
+                
+                // Methods Section
+                "methods.title": "Metode Pembayaran yang Tersedia",
+                "methods.subtitle": "Pilih metode pembayaran yang paling nyaman untuk Anda",
+                
+                // Footer
+                "footer.checkData": "Cek Data",
+                "footer.contact": "Grup WhatsApp",
+                "footer.copyright": "&copy; 2023 Fad's 7777. Sistem Klaim Pembayaran."
+            },
+            en: {
+                // Navigation
+                "nav.warning": "Warning",
+                "nav.shortcut": "Shortcut",
+                "nav.claim": "Claim Payment",
+                "nav.process": "Process",
+                "nav.methods": "Payment Methods",
+                "nav.claimNow": "Claim Now",
+                
+                // Language
+                "language.id": "Indonesia",
+                "language.en": "English",
+                
+                // Hero Section
+                "hero.title": "Claim <span>Payment</span> Fad's 7777",
+                "hero.subtitle": "Fill out the form with correct data for smooth and timely payment processing.",
+                "hero.badge1": "1:1 Process",
+                "hero.badge2": "No Need to Chat Admin",
+                "hero.badge3": "Check Data at datafads.vercel.app",
+                
+                // Shortcut Section
+                "shortcut.title": "Alternative Shortcut",
+                "shortcut.member": "For Members",
+                "shortcut.refferer": "For Refferers",
+                
+                // Warning Section
+                "warning.title": "⚠️ IMPORTANT WARNING!",
+                "warning.message1": "<strong>Pay attention to your Payment data carefully, admin is not responsible if there are writing errors from the User!</strong>",
+                "warning.message2": "Make sure the data you enter matches the data in the group. You can check your data at",
+                
+                // Form Section
+                "form.title": "Payment Claim Form",
+                "form.subtitle": "Fill out the form below with correct and appropriate data",
+                "form.memberTitle": "Payment Claim Form - Member",
+                "form.reffererTitle": "Payment Claim Form - Refferer",
+                "form.email": "LinkedIn Email",
+                "form.reffererEmail": "Refferer Email",
+                "form.invitedEmails": "Invited Emails",
+                "form.referralCode": "Referral Code",
+                "form.status": "Account Status",
+                "form.selectStatus": "Select Account Status",
+                "form.paymentMethod": "Payment Method",
+                "form.selectPayment": "Select Payment Method",
+                "form.accountName": "Account Holder Name",
+                "form.accountNumber": "Account Number",
+                "form.submit": "Claim Payment",
+                "form.addMore": "+ Add More",
+                
+                // Process Section
+                "process.title": "Payment Process",
+                "process.subtitle": "The following process will be carried out after you fill out the form",
+                "process.step1.title": "Fill Form Correctly",
+                "process.step1.description": "Make sure all data you enter is correct and matches the data in the group. Double check before submitting.",
+                "process.step2.title": "Submit Form Once Only",
+                "process.step2.description": "Submit the form only 1 time. No spamming forms, no chatting admin, no calling during payment process.",
+                "process.step3.title": "1:1 Payment Process",
+                "process.step3.description": "All will be processed 1:1 starting from the first chat received. Admin will process according to form submission order.",
+                "process.step4.title": "Wait for Confirmation",
+                "process.step4.description": "Wait for payment confirmation. The process may take time depending on the number of claims received.",
+                
+                // Methods Section
+                "methods.title": "Available Payment Methods",
+                "methods.subtitle": "Choose the most convenient payment method for you",
+                
+                // Footer
+                "footer.checkData": "Check Data",
+                "footer.contact": "WhatsApp Group",
+                "footer.copyright": "&copy; 2023 Fad's 7777. Payment Claim System."
+            }
+        };
+
+        // Current language
+        let currentLang = 'id';
+
+        // Language switcher functionality
+        const languageButton = document.getElementById('languageButton');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const languageOptions = document.querySelectorAll('.language-option');
+
+        // Toggle dropdown
+        languageButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            languageDropdown.classList.remove('active');
+        });
+
+        // Language selection
+        languageOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const lang = option.getAttribute('data-lang');
+                if (lang !== currentLang) {
+                    currentLang = lang;
+                    updateLanguage();
+                    
+                    // Update active state
+                    languageOptions.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                    
+                    // Update button text
+                    const flag = lang === 'id' ? '🇮🇩' : '🇺🇸';
+                    const code = lang === 'id' ? 'ID' : 'EN';
+                    languageButton.innerHTML = `<span>${flag} ${code}</span><span>▼</span>`;
+                    
+                    // Close dropdown
+                    languageDropdown.classList.remove('active');
+                }
+            });
+        });
+
+        // Update all text elements with translations
+        function updateLanguage() {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'OPTION') {
+                        element.setAttribute('placeholder', translations[currentLang][key]);
+                    } else {
+                        element.innerHTML = translations[currentLang][key];
+                    }
+                }
+            });
+        }
+
+        // Smooth scrolling for anchor links - DIPERBAIKI
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Scroll ke elemen target dengan offset untuk header
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Tambahkan highlight sementara untuk menunjukkan form yang dituju
+                    targetElement.style.boxShadow = '0 0 0 3px rgba(108, 99, 255, 0.5)';
+                    setTimeout(() => {
+                        targetElement.style.boxShadow = '';
+                    }, 2000);
+                }
+            });
+        });
+        
+        // Header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.backgroundColor = 'rgba(7, 7, 17, 0.98)';
+            } else {
+                header.style.backgroundColor = 'rgba(7, 7, 17, 0.95)';
+            }
+        });
+        
+        // Form submission to WhatsApp for Member
+        document.getElementById('member-payment-claim-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const email = document.getElementById('email').value;
+            const accountStatus = document.getElementById('account-status').value;
+            const paymentMethod = document.getElementById('payment-method').value;
+            const accountName = document.getElementById('account-name').value;
+            const accountNumber = document.getElementById('account-number').value;
+            
+            // Simple validation
+            if (!email || !accountStatus || !paymentMethod || !accountName || !accountNumber) {
+                alert(currentLang === 'id' ? 'Harap lengkapi semua field yang wajib diisi!' : 'Please complete all required fields!');
+                return;
+            }
+            
+            // Format message for WhatsApp
+            const message = currentLang === 'id' 
+                ? `Hello saya mau Claim Payment, mohon di proses.%0A%0AEmail Linkedin : ${email}%0AStatus Account : ${accountStatus}%0APayment Method : ${paymentMethod}%0AAtas Nama : ${accountName}%0ANomor Rekening/Akun : ${accountNumber}`
+                : `Hello I want to Claim Payment, please process.%0A%0ALinkedIn Email : ${email}%0AAccount Status : ${accountStatus}%0APayment Method : ${paymentMethod}%0AAccount Holder : ${accountName}%0AAccount Number : ${accountNumber}`;
+            
+            // WhatsApp number
+            const phoneNumber = "+6285640994846";
+            
+            // Create WhatsApp URL
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+            
+            // Open WhatsApp in new tab
+            window.open(whatsappURL, '_blank');
+            
+            // Show success message
+            alert(currentLang === 'id' 
+                ? 'Form klaim pembayaran berhasil dikirim! Mohon tunggu proses pembayaran. Jangan mengirim form berulang kali.'
+                : 'Payment claim form successfully sent! Please wait for the payment process. Do not submit the form repeatedly.');
+            
+            // Reset form
+            this.reset();
+        });
+        
+        // Form submission to WhatsApp for Refferer
+        document.getElementById('refferer-payment-claim-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const reffererEmail = document.getElementById('refferer-email').value;
+            const referralCode = document.getElementById('referral-code').value;
+            const invitedEmails = Array.from(document.querySelectorAll('.invited-email'))
+                .map(input => input.value)
+                .filter(email => email.trim() !== '');
+            const paymentMethod = document.getElementById('refferer-payment-method').value;
+            const accountName = document.getElementById('refferer-account-name').value;
+            const accountNumber = document.getElementById('refferer-account-number').value;
+            
+            // Simple validation
+            if (!reffererEmail || !referralCode || invitedEmails.length === 0 || !paymentMethod || !accountName || !accountNumber) {
+                alert(currentLang === 'id' ? 'Harap lengkapi semua field yang wajib diisi!' : 'Please complete all required fields!');
+                return;
+            }
+            
+            // Format invited emails for message
+            let invitedEmailsText = '';
+            invitedEmails.forEach((email, index) => {
+                invitedEmailsText += `${index + 1}. ${email}%0A`;
+            });
+            
+            // Format message for WhatsApp - TAMBAHKAN CODE REFERRAL
+            const message = currentLang === 'id' 
+                ? `Hello saya mau Claim Payment, mohon di proses.%0A%0AEmail Refferer : ${reffererEmail}%0ACode Referral : ${referralCode}%0AEmail Yang di undang :%0A${invitedEmailsText}Payment Method : ${paymentMethod}%0AAtas Nama : ${accountName}%0ANomor Rekening/Akun : ${accountNumber}`
+                : `Hello I want to Claim Payment, please process.%0A%0ARefferer Email : ${reffererEmail}%0AReferral Code : ${referralCode}%0AInvited Emails :%0A${invitedEmailsText}Payment Method : ${paymentMethod}%0AAccount Holder : ${accountName}%0AAccount Number : ${accountNumber}`;
+            
+            // WhatsApp number
+            const phoneNumber = "+6285640994846";
+            
+            // Create WhatsApp URL
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+            
+            // Open WhatsApp in new tab
+            window.open(whatsappURL, '_blank');
+            
+            // Show success message
+            alert(currentLang === 'id' 
+                ? 'Form klaim pembayaran berhasil dikirim! Mohon tunggu proses pembayaran. Jangan mengirim form berulang kali.'
+                : 'Payment claim form successfully sent! Please wait for the payment process. Do not submit the form repeatedly.');
+            
+            // Reset form
+            this.reset();
+            
+            // Reset invited emails to initial state
+            resetInvitedEmails();
+        });
+        
+        // Add/Remove invited emails functionality
+        const invitedEmailsContainer = document.getElementById('invited-emails-container');
+        const addEmailBtn = document.getElementById('add-email-btn');
+        
+        // Show remove buttons for existing email inputs
+        document.querySelectorAll('.email-input-group').forEach(group => {
+            const removeBtn = group.querySelector('.remove-email');
+            if (removeBtn) {
+                removeBtn.style.display = 'block';
+                removeBtn.addEventListener('click', function() {
+                    if (document.querySelectorAll('.email-input-group').length > 1) {
+                        group.remove();
+                    }
+                });
+            }
+        });
+        
+        // Add new email input
+        addEmailBtn.addEventListener('click', function() {
+            const newEmailGroup = document.createElement('div');
+            newEmailGroup.className = 'email-input-group';
+            newEmailGroup.innerHTML = `
+                <input type="email" class="form-control invited-email" placeholder="${currentLang === 'id' ? 'email@domain.com' : 'email@domain.com'}" required>
+                <button type="button" class="remove-email">×</button>
+            `;
+            
+            invitedEmailsContainer.appendChild(newEmailGroup);
+            
+            // Add event listener to remove button
+            const removeBtn = newEmailGroup.querySelector('.remove-email');
+            removeBtn.addEventListener('click', function() {
+                if (document.querySelectorAll('.email-input-group').length > 1) {
+                    newEmailGroup.remove();
+                }
+            });
+        });
+        
+        // Reset invited emails to initial state
+        function resetInvitedEmails() {
+            invitedEmailsContainer.innerHTML = `
+                <div class="email-input-group">
+                    <input type="email" class="form-control invited-email" placeholder="email1@domain.com" required>
+                    <button type="button" class="remove-email" style="display: none;">×</button>
+                </div>
+                <div class="email-input-group">
+                    <input type="email" class="form-control invited-email" placeholder="email2@domain.com" required>
+                    <button type="button" class="remove-email" style="display: none;">×</button>
+                </div>
+                <div class="email-input-group">
+                    <input type="email" class="form-control invited-email" placeholder="email3@domain.com" required>
+                    <button type="button" class="remove-email" style="display: none;">×</button>
+                </div>
+            `;
+            
+            // Reattach event listeners to remove buttons
+            document.querySelectorAll('.email-input-group').forEach(group => {
+                const removeBtn = group.querySelector('.remove-email');
+                if (removeBtn) {
+                    removeBtn.style.display = 'block';
+                    removeBtn.addEventListener('click', function() {
+                        if (document.querySelectorAll('.email-input-group').length > 1) {
+                            group.remove();
+                        }
+                    });
+                }
+            });
+        }
+
+        // Initialize language
+        updateLanguage();
+    </script>
+</body>
+</html>
